@@ -1,0 +1,7 @@
+streamlit
+pybaseball
+pandas
+numpy
+scipy
+requests
+lxml
