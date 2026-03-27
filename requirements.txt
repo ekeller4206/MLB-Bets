@@ -1,5 +1,5 @@
 streamlit
-pybaseball
+git+https://github.com/jldbc/pybaseball.git@master
 pandas
 numpy
 scipy
