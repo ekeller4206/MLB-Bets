@@ -19,15 +19,26 @@ except:
 # --- DATA ENGINE (STATS) ---
 @st.cache_data(ttl=3600)
 def fetch_mlb_data():
+    # THE FIX: This makes FanGraphs think your app is a real Chrome browser
+    import os
+    os.environ['USER_AGENT'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36'
+    
     current_year = 2026
-    p_season = pitching_stats(current_year)
-    b_season = batting_stats(current_year)
+    
+    # Adding 'qual' limits the search to players with enough playing time
+    # This makes the data transfer much smaller and faster
+    p_season = pitching_stats(current_year, qual=10) 
+    b_season = batting_stats(current_year, qual=10)
     
     # Recency Window (Last 14 Days)
     end_date = datetime.date.today()
     start_date = end_date - datetime.timedelta(days=14)
+    
+    # We use the date strings here
     p_l14 = pitching_stats(start_date.strftime('%Y-%m-%d'), end_date.strftime('%Y-%m-%d'))
     b_l14 = batting_stats(start_date.strftime('%Y-%m-%d'), end_date.strftime('%Y-%m-%d'))
+    
+    return p_season, b_season, p_l14, b_l14
     
     return p_season, b_season, p_l14, b_l14
 
